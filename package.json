@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev:start": "nodemon src/index.ts",
-    "dev:deploy": "nodemon src/slash.ts"
+    "dev:deploy": "nodemon src/slash.ts",
+    "prod:start": "node dist/index.js",
+    "prod:postinstall": "tsc"
   },
   "author": "",
   "license": "ISC",
