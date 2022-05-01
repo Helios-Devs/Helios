@@ -1,0 +1,10 @@
+.idea
+.git
+.env
+node_modules
+yarn.lock
+package.lock
+.idea/modules.xml
+.idea/vcs.xml
+.idea/Helios.iml
+.env
