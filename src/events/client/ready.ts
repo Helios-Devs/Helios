@@ -3,7 +3,6 @@ import { Client } from "discord.js";
 import { customClient } from "../../index";
 import { connect } from "mongoose";
 
-
 export let ready: Event = {
 	name: 'ready',
 	once: false,

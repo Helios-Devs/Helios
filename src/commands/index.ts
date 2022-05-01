@@ -3,10 +3,12 @@ import { help } from "./utility/help";
 import { ban } from "./moderation/ban";
 import { purge } from "./moderation/purge";
 import { reactions } from "./utility/reactions";
+import { kick } from "./moderation/kick";
 
 export const commands: Command[] = [
     ping,
     help,
+    kick,
     ban,
     purge,
     reactions
