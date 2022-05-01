@@ -1,7 +1,7 @@
 import { Guild } from "discord.js";
 import { models } from "../models/models";
 
-export let server = {
+export let servers = {
 	fetch: async (guild: Guild) => {
 		let server = await models.server.findOne({id: guild.id})
 		if(server) {
@@ -42,12 +42,16 @@ export let server = {
 	},
 	setReactionRoles: async (guild: Guild, messageID: string, roleID: string, emoteID: string) => {
 		let server = await models.server.findOne({id: guild.id})
-		if(!server) return;
-		let test = new models.reactionRole({
+		if(!server) return { status: false, message: 'NoServer'};
+		if((await server.reactionRoles.filter(r=> r.emoteID === emoteID)).length > 0) return { status: false, message: 'EmoteInUse'};
+		if(server.reactionRoles.length === 10) return { status: false, message: 'MaxRoles'};
+		let reactionRole = new models.reactionRole({
 			messageID: messageID,
 			roleID: roleID,
 			emoteID: emoteID
 		})
-		return test
+		server.reactionRoles.push(reactionRole)
+		await server.save()
+		return {status: true, message: await models.server.findOne({id: guild.id}) }
 	}
 }

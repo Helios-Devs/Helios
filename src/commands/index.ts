@@ -4,7 +4,7 @@ import { ban } from "./moderation/ban";
 import { purge } from "./moderation/purge";
 import { reactions } from "./utility/reactions";
 
-export const commands = [
+export const commands: Command[] = [
     ping,
     help,
     ban,
