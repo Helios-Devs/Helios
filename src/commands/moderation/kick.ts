@@ -1,12 +1,25 @@
-import { CommandInteraction, Formatters, Message, User } from "discord.js";
+import { CommandInteraction, Formatters, Guild, Message, User } from "discord.js";
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { Command } from "../index";
 import { customClient } from "../../index";
 
-async function kickMember(member: User, guild: any, reason: string) {
-	let dmChannel = await member.createDM()
-	await dmChannel.send(`You have been kicked from \`${guild.name}\` for \`${reason}\`.`)
-	return {content: `Kicked: ` + Formatters.inlineCode(member.tag)}
+async function kickMember(member: User, guild: Guild, reason: string) {
+	try {
+		let dmChannel = await member.createDM()
+		await dmChannel.send(`You have been kicked from \`${guild.name}\` for \`${reason}\`.`)
+	} catch (e){}
+
+	try{
+		await guild.members.kick(member)
+		return {content: `Successfully kicked: ${Formatters.inlineCode(member.tag)}`}
+	} catch (e: any) {
+		if(e?.message === 'Missing Permissions'){
+			return {content: `Failed to kick: ${Formatters.inlineCode(member.tag)} due to a lack of permissions!`}
+		} else{
+			return {content: `Failed to kick: ${Formatters.inlineCode(member.tag)}`}
+		}
+
+	}
 }
 
 export let kick: Command = {
@@ -26,7 +39,9 @@ export let kick: Command = {
 		if (message.mentions.users.size > 0) {
 			let guild = message.guild
 			let reason = args.slice(1).join(' ')
-			// @ts-ignore
+
+			if(!guild) return;
+
 			for (let member of message.mentions.users) {
 				await message.reply(await kickMember(member[1], guild, reason));
 			}
@@ -38,7 +53,7 @@ export let kick: Command = {
 		let member = interaction.options.get('user')
 		let reason = interaction.options.get('reason')
 		let guild = interaction.guild
-		if (!member) return;
-		await interaction.reply(await kickMember(member.user as User, guild, `${reason}`))
+		if (!member || !guild) return;
+		//await interaction.reply(await kickMember(member.user, guild, `${reason}`))
 	}
 }
