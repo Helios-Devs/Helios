@@ -18,7 +18,6 @@ async function kickMember(member: User, guild: Guild, reason: string) {
 		} else{
 			return {content: `Failed to kick: ${Formatters.inlineCode(member.tag)}`}
 		}
-
 	}
 }
 
@@ -27,11 +26,11 @@ export let kick: Command = {
 	alias: ['boot'],
 	desc: "Kicks someone from your guild!",
 	category: 'Moderation 🧑‍⚖️',
-	args: ['<@member>'],
+	args: ['<@member>', '<reason>'],
 	data: new SlashCommandBuilder().setName('kick').setDescription('Kicks someone from your guild!').addUserOption(option =>
-		option.setName('user').setDescription('Who to kick?').setRequired(true)
+		option.setName('user').setDescription('Member to kick').setRequired(true)
 	).addStringOption(option =>
-		option.setName('reason').setDescription('Reason for the kick?').setRequired(false)
+		option.setName('reason').setDescription('Reason for the kick').setRequired(true)
 	),
 	perms: ['KICK_MEMBERS'],
 	bPerms: ['SEND_MESSAGES', 'KICK_MEMBERS'],
@@ -40,7 +39,7 @@ export let kick: Command = {
 			let guild = message.guild
 			let reason = args.slice(1).join(' ')
 
-			if(!guild) return;
+			if(!guild || !reason) return await message.reply({content: `Failed to run command. Usage:\n` + Formatters.inlineCode(`${client.prefix}kick <@member> <reason>`)});
 
 			for (let member of message.mentions.users) {
 				await message.reply(await kickMember(member[1], guild, reason));
@@ -50,10 +49,14 @@ export let kick: Command = {
 		}
 	},
 	slashExecute: async function (interaction: CommandInteraction, client: customClient) {
-		let member = interaction.options.get('user')
-		let reason = interaction.options.get('reason')
+		let member = interaction.options.getUser('user')
+		let reason = interaction.options.getString('reason')
 		let guild = interaction.guild
-		if (!member || !guild) return;
-		//await interaction.reply(await kickMember(member.user, guild, `${reason}`))
+		if (!member || !guild || !reason) return await interaction.reply({content: `Failed to run command. Usage:\n` + Formatters.inlineCode(`${client.prefix}kick <@member> <reason>`)});
+		if (member) {
+			await interaction.reply(await kickMember(member, guild, reason));
+		} else {
+			await interaction.reply({ content: 'Please mention at least one user!' })
+		}
 	}
 }
