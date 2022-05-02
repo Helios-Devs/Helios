@@ -1,14 +1,13 @@
-import { interactionCreate } from "./interaction/interactionCreate";
-import { messageCreate } from "./message/messageCreate";
-import { messageReactionAdd } from "./message/messageReactionAdd";
+import { messageCreate, messageReactionAdd } from "./message/";
+import { slashInteraction, buttonInteraction } from "./interaction/";
 import { ready } from "./client/ready";
-
 
 export const events: Event[] = [
 	ready,
 	messageCreate,
 	messageReactionAdd,
-	interactionCreate
+	slashInteraction,
+	buttonInteraction
 ]
 
 export interface Event {

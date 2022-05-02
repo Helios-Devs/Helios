@@ -1,8 +1,9 @@
 import { Schema, model, Number } from 'mongoose';
 
-interface serverInterface {
+export interface serverInterface {
 	id: string
 	loggingChannelID: string
+	appealChannel: string
 	muteRoleID: string
 	reactionRoles: any[]
 	scamBan: boolean
@@ -11,6 +12,7 @@ interface serverInterface {
 const serverSchema = new Schema<serverInterface>({
 	id: String,
 	loggingChannelID: String,
+	appealChannel: String,
 	muteRoleID: String,
 	reactionRoles: [],
 	scamBan: false

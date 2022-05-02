@@ -2,8 +2,7 @@ import { Event } from "../index";
 import { Interaction, CacheType, CommandInteraction } from "discord.js";
 import { customClient } from "../../index";
 
-
-export let interactionCreate: Event = {
+export let slashInteraction: Event = {
 	name: 'interactionCreate',
 	once: false,
 	execute: async (interaction: Interaction<CacheType>, client: customClient) => {

@@ -20,15 +20,22 @@ export let messageCreate: Event = {
 				await message.reply(await cleanEval(message, client))
 			}
 			else if(commandName === 'settings'){
-				if(args[0] === 'logs'){
-					if(args[1] === 'add'){
-						let server = await client.servers.fetch(message?.guild)
-						let channel = message.mentions.channels.first()
-						if(!channel) {
+				let server = await client.servers.fetch(message?.guild)
+				let channel = message.mentions.channels.first()
+				if(args[0] === 'add') {
+					if (args[1] === 'log') {
+						if (!channel) {
 							await message.reply('Please mention a channel')
 							return
 						}
 						await console.log(await client.servers.setLogChannel(message.guild, channel.id))
+					}
+					if (args[1] === 'appeal') {
+						if (!channel) {
+							await message.reply('Please mention a channel')
+							return
+						}
+						await console.log(await client.servers.setAppealChannel(message.guild, channel.id))
 					}
 				}
 			}

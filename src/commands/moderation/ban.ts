@@ -1,17 +1,23 @@
-import { CommandInteraction, Formatters, Guild, Message, User } from "discord.js";
+import { CommandInteraction, Formatters, Guild, Message, MessageActionRow, MessageButton, User } from "discord.js";
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { Command } from "../index";
 import { customClient } from "../../index";
 
 async function banMember(member: User, guild: Guild, ban: { delete: number, reason: string }){
 
-	try {
-		let dmChannel = await member.createDM()
-		await dmChannel.send(`You have been banned from \`${guild.name}\` for \`${ban.reason}\`.`)
-	} catch (e){}
+	let appeal = new MessageButton().setStyle('PRIMARY').setLabel('APPEAL').setCustomId(`ba-${guild.id}`)
+	let appealRow = new MessageActionRow().addComponents([appeal])
 
-	try{
-		await guild.members.ban(member, {days: ban.delete})
+	try {
+
+		let dmChannel = await member.createDM()
+		await dmChannel.send({
+			content: `You have been banned from \`${guild.name}\` for \`${ban.reason}\`. \nIf you are unable to appeal, join: https://discord.gg/EW5SxFY8sw and try again!`,
+			components: [appealRow]
+		})
+
+		await guild.members.ban(member, {days: ban.delete, reason: ban.reason})
+
 		return {content: `Successfully banned: ` + Formatters.inlineCode(member.tag)}
 	} catch (e: any) {
 		if(e?.message === 'Missing Permissions'){

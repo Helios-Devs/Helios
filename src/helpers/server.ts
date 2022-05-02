@@ -10,6 +10,7 @@ export let servers = {
 			let server = new models.server({
 				id: guild.id,
 				loggingChannelID: '',
+				appealChannel: '',
 				muteRoleID: '',
 				reactionRoles: [],
 				scamBan: false
@@ -29,6 +30,20 @@ export let servers = {
 		let server = await models.server.findOne({id: guild.id})
 		if(!server) return;
 		server.loggingChannelID = channelID
+		await server.save()
+		return models.server.findOne({id: guild.id});
+	},
+	fetchAppealChannel : async (guild: Guild) : Promise<undefined|string> => {
+		let server = await models.server.findOne({id: guild.id})
+		console.log(guild.id, server)
+		if(!server) return;
+		if(!server.appealChannel) return;
+		return server.appealChannel
+	},
+	setAppealChannel: async (guild: Guild, channelID: string) => {
+		let server = await models.server.findOne({id: guild.id})
+		if(!server) return;
+		server.appealChannel = channelID
 		await server.save()
 		return models.server.findOne({id: guild.id});
 	},
