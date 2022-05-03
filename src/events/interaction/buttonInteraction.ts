@@ -1,13 +1,5 @@
 import { Event } from "../index";
-import {
-	Interaction,
-	CacheType,
-	CommandInteraction,
-	Guild,
-	MessageButton,
-	MessageActionRow,
-	MessageEmbed, Formatters
-} from "discord.js";
+import { Interaction, CacheType, MessageButton, MessageActionRow, MessageEmbed, Formatters } from "discord.js";
 import { serverInterface } from "../../models/server";
 import { customClient } from "../../index";
 
@@ -33,13 +25,28 @@ export let buttonInteraction: Event = {
 					let acceptedRow = new MessageActionRow().addComponents([accepted])
 
 					let memberID = interaction.customId.replace('aa-', '')
-					interaction.guild.bans.remove(memberID)
+					interaction.guild.bans.remove(memberID).catch(e => {})
 					await interaction.update({embeds: interaction.message.embeds, components: [acceptedRow]})
+
+					let member = await client.users.fetch(memberID)
+					let dmChannel = await member.createDM()
+					let guildChannels = [...(await interaction.guild.channels.fetch()).values()].filter(channel => channel.type === 'GUILD_TEXT')
+
+					if (guildChannels.length > 0) {
+						let guildChannel = guildChannels[0]
+						await dmChannel.send({
+							content: `You have been unbanned from \`${interaction.guild.name}\`.\nInvite Link: <${await interaction.guild.invites.create(guildChannel.id, { maxUses: 1 })}>.`,
+						})
+					} else {
+						await dmChannel.send({
+							content: `You have been unbanned from \`${interaction.guild.name}\`.`,
+						})
+					}
+
 				}catch (e) {
 					console.log(e)
 				}
-			}
-			else if(interaction.customId.startsWith('ba-')){ // BAN APPEAL
+			}else if(interaction.customId.startsWith('ba-')){ // BAN APPEAL
 				try {
 					let guildID = interaction.customId.replace('ba-', '')
 					let appealed = new MessageButton().setStyle('SECONDARY').setLabel('APPEALED').setDisabled(true).setCustomId('DISABLED')
@@ -70,8 +77,14 @@ export let buttonInteraction: Event = {
 					await interaction.update({content: `${interaction.message.content}`, components: [appealedRow]})
 					await channel.send({embeds: [appealEmbed], components: [verdictRow]})
 
-				}catch (e) {
-					console.log(e)
+				}catch (e:any) {
+					if (e.message === 'Unknown Ban') {
+						let appealed = new MessageButton().setStyle('SECONDARY').setLabel('APPEALED').setDisabled(true).setCustomId('DISABLED')
+						let appealedRow = new MessageActionRow().addComponents([appealed])
+						return await interaction.update({ content: `${interaction.message.content}`, components: [appealedRow] })
+					} else {
+						console.log(e)
+					}
 				}
 			}
 		}
