@@ -1,2 +1,2 @@
-export { slashInteraction } from './slashInteraction'
-export { buttonInteraction } from './buttonInteraction'
+export { slashInteraction } from './slashInteraction';
+export { buttonInteraction } from './buttonInteraction';

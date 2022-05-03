@@ -1,11 +1,11 @@
-import { customClient } from "../index";
+import { customClient } from '../index';
 
-export function refreshStatus(client: customClient){
-	if(client.isReady()){
-		try{ // @ts-ignore
-			client.user.setActivity('for h!help', {type: "WATCHING"})
-		} catch (e) {}
-	}
+export function refreshStatus(client: customClient) {
+  if (client.isReady()) {
+    try {
+      client.user.setActivity('for h!help', { type: 'WATCHING' });
+    } catch (e) {}
+  }
 }
 
 //const status = require('../data/status.json');

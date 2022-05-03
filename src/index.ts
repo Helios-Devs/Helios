@@ -1,40 +1,40 @@
 // Libraries
-import { Client, Guild, Intents } from 'discord.js';
-import { ToadScheduler, SimpleIntervalJob, Task } from "toad-scheduler";
-import { connect, Mongoose } from "mongoose";
-require('dotenv').config()
+import { Client, Intents } from 'discord.js';
+import { ToadScheduler } from 'toad-scheduler';
+import { Mongoose } from 'mongoose';
+require('dotenv').config();
 
 // Core
 import { Command, commands } from './commands';
-import { Event, events } from './events/';
+import { events } from './events/';
 
 // Helpers
-import { servers } from "./helpers/server";
+import { servers } from './helpers/server';
 
 // Custom client class
 export class customClient extends Client {
-	commands: Command[] = commands
-	prefix: string = 'h!'
-	owners: number[] = [719292655963734056, 778110527892488233]
-	db!: Mongoose
-	servers = servers
-	scheduler = new ToadScheduler()
+  commands: Command[] = commands;
+  prefix = 'h!';
+  owners: number[] = [719292655963734056, 778110527892488233];
+  db!: Mongoose;
+  servers = servers;
+  scheduler = new ToadScheduler();
 }
 
 // Client options
-let client = new customClient({
-	intents: [Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
-	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
+const client = new customClient({
+  intents: [Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
+  partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 });
 
 // Event Loader
-for (let event of events) {
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args, client));
-	} else {
-		client.on(event.name, (...args) => event.execute(...args, client));
-	}
+for (const event of events) {
+  if (event.once) {
+    client.once(event.name, (...args) => event.execute(...args, client));
+  } else {
+    client.on(event.name, (...args) => event.execute(...args, client));
+  }
 }
 
 // Client login (Bot start)
-void client.login(process.env.TOKEN)
+void client.login(process.env.TOKEN);

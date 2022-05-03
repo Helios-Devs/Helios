@@ -1,15 +1,15 @@
-import { Schema, model, Number } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 interface reactionRoleInterface {
-	messageID: string
-	roleID: string
-	emoteID: string
+  messageID: string;
+  roleID: string;
+  emoteID: string;
 }
 
 const reactionSchema = new Schema<reactionRoleInterface>({
-	messageID: String,
-	roleID: String,
-	emoteID: String
+  messageID: String,
+  roleID: String,
+  emoteID: String
 });
 
-export let reactionRole = model<reactionRoleInterface>('ReactionRoles', reactionSchema);
+export const reactionRole = model<reactionRoleInterface>('ReactionRoles', reactionSchema);

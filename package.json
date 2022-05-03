@@ -6,8 +6,11 @@
   "scripts": {
     "dev:start": "nodemon src/index.ts",
     "dev:deploy": "nodemon src/slash.ts",
+    "dev:format": "prettier --config .prettierrc \"{,!(node_modules)/**/}*.ts\" --write",
+    "dev:lint": "yarn run eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "start": "node dist/index.js",
-    "postinstall": "tsc"
+    "postinstall": "tsc",
+    "cleanup": "yarn run dev:format & yarn run dev:lint"
   },
   "author": "",
   "license": "ISC",
@@ -17,8 +20,14 @@
     "dotenv": "^16.0.0",
     "mongoose": "^6.3.1",
     "nodemon": "^2.0.15",
+    "prettier": "^2.6.2",
     "toad-scheduler": "^1.6.0",
-    "ts-node": "^10.7.0",
+    "ts-node": "^10.7.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "eslint": "^8.14.0",
     "typescript": "^4.6.4"
   }
 }
