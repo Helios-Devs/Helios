@@ -24,7 +24,7 @@ export const eightball: Command = {
 	name: '8ball',
 	alias: ['eightball', 'eight-ball'],
 	desc: 'Ask the magic 8 ball a question',
-	category: 'Fun ⚽',
+	category: 'Fun 🎉',
 	args: ['<question>'],
 	data: new SlashCommandBuilder()
 		.setName('8ball')

@@ -6,6 +6,7 @@ import { reactions } from './utility/reactions';
 import { kick } from './moderation/kick';
 import { eightball } from "./fun/8ball";
 import { userinfo } from "./utility/userinfo";
+import { cat } from './fun/cat';
 
 export const commands: Command[] = [
 	ping,
@@ -15,7 +16,8 @@ export const commands: Command[] = [
 	purge,
 	reactions,
 	eightball,
-	userinfo
+	userinfo,
+	cat
 ];
 
 export interface Command {
