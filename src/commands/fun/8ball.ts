@@ -33,6 +33,7 @@ export const eightball: Command = {
 	perms: [],
 	bPerms: ['SEND_MESSAGES'],
 	execute: function (message: Message, client: customClient, args: any[]) {
+		if(args.length < 1) return;
 		return message.reply({ embeds: [eightBallEmbed(args.join(' '))] });
 	},
 	slashExecute: function (interaction: CommandInteraction) {

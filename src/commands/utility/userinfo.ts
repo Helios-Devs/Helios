@@ -33,6 +33,7 @@ export const userinfo: Command = {
 	perms: [],
 	bPerms: ['SEND_MESSAGES'],
 	execute: async function (message: Message, client: customClient, args: any[]) {
+		if(args.length < 1) return;
 		const user = await message.guild?.members.fetch(args[0].replace(/[<@!>]/g, '') || message.author.id)
 			.catch(() => {
 				message.reply('Could not find that user.');
