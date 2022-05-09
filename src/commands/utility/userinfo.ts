@@ -11,11 +11,12 @@ function embed(member: GuildMember) {
 
 	embed.addField('ID', member.user.id);
 	embed.addField('Tag', member.user.tag);
-	embed.addField('Created at', `<t:${member.user.createdTimestamp}:R>`);
-	embed.addField('Joined', `<t:${member.joinedTimestamp}:R>`);
-
-
+	embed.addField('Created at', `<t:${Math.floor(member.user.createdTimestamp / 1000)}:R>`);
 	embed.setTimestamp();
+
+	if(member.joinedTimestamp){
+		embed.addField('Joined', `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>`);
+	}
 
 	return embed;
 }
