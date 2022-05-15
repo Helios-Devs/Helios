@@ -14,7 +14,7 @@ export const messageCreate: Event = {
     const commandName: string = args.shift()?.toLowerCase() ?? '';
     let command = client.commands.filter((cmd) => cmd.name === commandName);
     if (command.length === 0) command = client.commands.filter((cmd) => cmd.alias.includes(commandName));
-    if (command.args.length && !args.length) return message.reply(`This command requires arguments. \`${client.prefix}${command.name} ${command.args}\``);
+    if (command[0].args.length && !args.length) return message.reply(`This command requires arguments. \`${client.prefix}${command[0].name} ${command[0].args}\``);
 
     if (client.owners.includes(parseInt(message.author.id))) {
       if (commandName === `eval`) {
